@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService as NestJwtService } from '@nestjs/jwt';
 import { DatabaseService } from 'src/database/database.service';
+
 import { JWTPayload } from './dto/jwt-payload.dto';
 
 @Injectable()
@@ -19,7 +20,7 @@ export class JwtService {
     this.jwtAccessDuration = config.get('JWT_ACCESS_DURATION');
     this.jwtAccessSecret = config.get('JWT_ACCESS_SECRET');
 
-    this.jwtRefreshDuration = config.get('JWT_REFRESH__DURATION');
+    this.jwtRefreshDuration = config.get('JWT_REFRESH_DURATION');
     this.jwtRefreshSecret = config.get('JWT_REFRESH_SECRET');
   }
 
@@ -28,13 +29,12 @@ export class JwtService {
       secret: this.jwtAccessSecret,
       expiresIn: this.jwtAccessDuration,
     });
-    console.log('df');
     return accessToken;
   }
   async createJWTRefresh(payload: JWTPayload) {
     return await this.nestJwtService.signAsync(payload, {
-      secret: this.jwtAccessSecret,
-      expiresIn: this.jwtAccessDuration,
+      secret: this.jwtRefreshSecret,
+      expiresIn: this.jwtRefreshDuration,
     });
   }
 
@@ -47,16 +47,15 @@ export class JwtService {
     return data;
   }
 
-  async saveRefreshUserToJWT(userId: number, token: string) {
-    return await this.prisma.token.upsert({
-      where: { userId },
-      update: {
-        refreshToken: token,
-      },
-      create: {
-        userId,
-        refreshToken: token,
-      },
+  async validateRefreshToken(token: string) {
+    return await this.nestJwtService.verifyAsync(token, {
+      secret: this.jwtRefreshSecret,
+    });
+  }
+
+  async validateAccessToken(token: string) {
+    return await this.nestJwtService.verifyAsync(token, {
+      secret: this.jwtAccessSecret,
     });
   }
 }

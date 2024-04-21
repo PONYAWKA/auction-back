@@ -19,7 +19,7 @@ enum Sex {
   FEMALE
 }
 
-model User {
+model Users {
   id           Int      @id @unique @default(autoincrement())
   email        String   @unique()
   passwordHash String
@@ -29,42 +29,43 @@ model User {
   location     String
   sex          Sex
 
-  auctions Auction[]
-  bits     Bit[]
-  Token    Token?
+  auctions Auctions[]
+  bits     Bits[]
+  Tokens   Tokens[]
 }
 
-model Token {
+model Tokens {
+  id           Int    @id @unique @default(autoincrement())
   refreshToken String
-  user         User   @relation(fields: [userId], references: [id])
-  userId       Int    @id @unique
+  user         Users  @relation(fields: [userId], references: [id])
+  userId       Int
 }
 
-model Auction {
+model Auctions {
   id           Int      @id @unique @default(autoincrement())
   paintingName String
   createdAt    DateTime
   category     String
-  minBit       Float
-  maxBit       Float
+  minBits      Float
+  maxBits      Float
   startPrice   Float
   startDate    DateTime
   endDate      DateTime
   image        String
 
-  User          User @relation(fields: [creatorUserId], references: [id])
-  creatorUserId Int
+  Users          Users @relation(fields: [creatorUsersId], references: [id])
+  creatorUsersId Int
 
-  bits Bit[]
+  bits Bits[]
 }
 
-model Bit {
+model Bits {
   id     Int   @id @unique @default(autoincrement())
   bitSum Float
 
-  bitAuction Int
-  User       User    @relation(fields: [bitOwner], references: [id])
-  bitOwner   Int
-  Auction    Auction @relation(fields: [auctionId], references: [id])
-  auctionId  Int
+  bitAuctions Int
+  Users       Users    @relation(fields: [bitOwner], references: [id])
+  bitOwner    Int
+  Auctions    Auctions @relation(fields: [auctionId], references: [id])
+  auctionId   Int
 }

@@ -1,7 +1,7 @@
-import { $Enums, User } from '@prisma/client';
+import { $Enums, Users } from '@prisma/client';
 import { IsDate, IsEmail, IsEnum, IsNumber, IsString } from 'class-validator';
 
-export class UserEntity implements User {
+export class UserEntity implements Users {
   @IsDate()
   birth: Date;
 

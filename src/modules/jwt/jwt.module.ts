@@ -1,8 +1,9 @@
 import { Module } from '@nestjs/common';
-import { JwtService } from './jwt.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { DatabaseModule } from 'src/database/database.module';
 import { JwtModule as NestJwtModule } from '@nestjs/jwt';
+import { DatabaseModule } from 'src/database/database.module';
+
+import { JwtService } from './jwt.service';
 
 @Module({
   imports: [

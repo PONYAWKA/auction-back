@@ -1,10 +1,10 @@
 import { $Enums } from '@prisma/client';
 import {
+  IsDateString,
   IsEmail,
-  IsString,
   IsEnum,
   IsNotEmpty,
-  IsDateString,
+  IsString,
 } from 'class-validator';
 
 export class RegisterUserDTO {

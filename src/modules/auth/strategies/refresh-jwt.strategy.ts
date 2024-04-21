@@ -1,11 +1,11 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
-import { ExtractJwt, Strategy } from 'passport-jwt';
 import { Request } from 'express';
-import { CookieEnum } from 'src/common/constants/cookie-enum';
-import { JWTPayload } from 'src/modules/jwt/dto/jwt-payload.dto';
+import { ExtractJwt, Strategy } from 'passport-jwt';
 
+import { CookieEnum } from '@/common/constants/cookie-enum';
+import { JWTPayload } from '@/types/jwt-payload';
 @Injectable()
 export class RefreshJwtStrategy extends PassportStrategy(Strategy, 'refresh') {
   constructor(private readonly config: ConfigService) {
@@ -16,7 +16,8 @@ export class RefreshJwtStrategy extends PassportStrategy(Strategy, 'refresh') {
           if (!data) {
             return null;
           }
-          return data.refreshToken;
+
+          return data;
         },
       ]),
       ignoreExpiration: true,
